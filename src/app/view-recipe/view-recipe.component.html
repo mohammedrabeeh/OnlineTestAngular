@@ -1,31 +1,34 @@
 
 <h3>Recipe List</h3>
-<table mat-table [dataSource]="recipes" class="mat-elevation-z8" style="width: 100%;">
+<button type="button" mat-flat-button color="primary" (click)="sortbyTitle()">Sort By Title</button>
+<button type="button" mat-flat-button color="primary" (click)="sortbyDate()">Sort By Date</button>
+
+<table mat-table [dataSource]="recipes" class="mat-elevation-z8" style="width: 100%;"  matSort (matSortChange)="sortData($event)">
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
   
     <!-- Position Column -->
     <ng-container matColumnDef="recipeId">
-      <th mat-header-cell *matHeaderCellDef> ID. </th>
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header="recipeId"> ID. </th>
       <td mat-cell *matCellDef="let element"> {{element.recipeId}} </td>
     </ng-container>
   
     <!-- Name Column -->
     <ng-container matColumnDef="recipeTitle">
-      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="recipeTitle"> Title </th>
       <td mat-cell *matCellDef="let element"> {{element.recipeTitle}} </td>
     </ng-container>
   
     <!-- Weight Column -->
     <ng-container matColumnDef="dateAdded">
-      <th mat-header-cell *matHeaderCellDef> Created Date </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="dateAdded"> Created Date </th>
       <td mat-cell *matCellDef="let element"> {{element.dateAdded}} </td>
     </ng-container>
   
     <!-- Symbol Column -->
     <ng-container matColumnDef="levelName">
-      <th mat-header-cell *matHeaderCellDef> Level </th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="levelName"> Level </th>
       <td mat-cell *matCellDef="let element"> {{element.levelName}} </td>
     </ng-container>
   
