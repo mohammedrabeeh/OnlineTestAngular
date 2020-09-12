@@ -1,0 +1,72 @@
+
+<h3>Recipe List</h3>
+<table mat-table [dataSource]="recipes" class="mat-elevation-z8" style="width: 100%;">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+  
+    <!-- Position Column -->
+    <ng-container matColumnDef="recipeId">
+      <th mat-header-cell *matHeaderCellDef> ID. </th>
+      <td mat-cell *matCellDef="let element"> {{element.recipeId}} </td>
+    </ng-container>
+  
+    <!-- Name Column -->
+    <ng-container matColumnDef="recipeTitle">
+      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <td mat-cell *matCellDef="let element"> {{element.recipeTitle}} </td>
+    </ng-container>
+  
+    <!-- Weight Column -->
+    <ng-container matColumnDef="dateAdded">
+      <th mat-header-cell *matHeaderCellDef> Created Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.dateAdded}} </td>
+    </ng-container>
+  
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="levelName">
+      <th mat-header-cell *matHeaderCellDef> Level </th>
+      <td mat-cell *matCellDef="let element"> {{element.levelName}} </td>
+    </ng-container>
+  
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="steps">
+      <th mat-header-cell *matHeaderCellDef> Steps </th>
+      <td mat-cell *matCellDef="let element"> 
+        <div *ngFor="let step of element.steps">
+            {{step.stepName}}
+        </div></td>
+    </ng-container>
+  
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="ingredients">
+      <th mat-header-cell *matHeaderCellDef> Ingredients </th>
+      <td mat-cell *matCellDef="let element"> 
+        <div *ngFor="let ingr of element.ingredients">
+            {{ingr.ingredientName}}
+        </div></td>
+    </ng-container>
+  
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="images">
+      <th mat-header-cell *matHeaderCellDef> Images </th>
+      <td mat-cell *matCellDef="let element"> 
+        <img src="https://localhost:44368/Uploads/{{element.image1}}" *ngIf="element.image1" style="width: 50px; height: 50px;" />
+        <img src="https://localhost:44368/Uploads/{{element.image2}}" *ngIf="element.image2" style="width: 50px; height: 50px;" />
+        <img src="https://localhost:44368/Uploads/{{element.image3}}" *ngIf="element.image3" style="width: 50px; height: 50px;" />
+
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef> Edit </th>
+      <td mat-cell *matCellDef="let element"> 
+        <a routerLink="/edit-recipe/{{element.recipeId}}"><button mat-button>Edit</button></a>
+      </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
+  

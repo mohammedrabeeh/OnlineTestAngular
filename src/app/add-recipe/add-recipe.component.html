@@ -1,0 +1,65 @@
+<mat-card style="text-align: center;">
+    <form class="example-form" #f="ngForm" (ngSubmit)="onSubmit()" *ngIf="RecipeVM">
+    <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Recipe Title</mat-label>
+          <input matInput placeholder="Ex. Pizza" name="RecipeTitle" required [(ngModel)]="RecipeVM.recipeTitle">
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field appearance="fill">
+            <mat-label>Level</mat-label>
+            <mat-select name="LevelID" required  [(ngModel)]="RecipeVM.levelID">
+              <mat-option [value]="level.levelId" *ngFor="let level of levels">{{ level.levelName }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div>
+    <div *ngFor="let step of RecipeVM.steps; let i = index;let isfirst = first;">
+        <mat-form-field appearance="fill">
+            <mat-label>Step {{i+1}}</mat-label>
+            <input matInput placeholder="Ex. Add Water" name="StepName_{{i}}" [(ngModel)]="step.stepName">
+        </mat-form-field>
+        <button type="button" mat-flat-button color="warn" (click)="removestep(i)" *ngIf="!isfirst">Remove</button>
+
+    </div>
+    <div>
+        <button type="button" mat-flat-button color="primary" (click)="addstep()">Add Steps</button>
+    </div>
+</div>
+<div>
+<div *ngFor="let ingr of RecipeVM.ingredients; let i = index;let isfirst = first;">
+    <mat-form-field appearance="fill">
+        <mat-label>Ingredient {{i+1}}</mat-label>
+        <input matInput placeholder="Ex. Add Water" name="IngrName_{{i}}" [(ngModel)]="ingr.ingredientName">
+    </mat-form-field>
+    <button type="button" mat-flat-button color="warn" (click)="removeIngredient(i)" *ngIf="!isfirst">Remove</button>
+
+</div>
+<div>
+    <button type="button" mat-flat-button color="primary" (click)="addIngredient()">Add Ingredient</button>
+</div>
+<div>
+      <mat-label>Image 1</mat-label>
+    <input type="file" name="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;">
+        <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button>
+    <img src="https://localhost:44368/Uploads/{{RecipeVM.image1}}" *ngIf="RecipeVM.image1" style="width: 50px; height: 50px;" />
+</div>
+<div>
+      <mat-label>Image 2</mat-label>
+    <input type="file" name="file2" #file2 placeholder="Choose file" (change)="uploadFile2(file2.files)" style="display:none;">
+        <button type="button" class="btn btn-success" (click)="file2.click()">Upload File</button>
+    <img src="https://localhost:44368/Uploads/{{RecipeVM.image2}}" *ngIf="RecipeVM.image2" style="width: 50px; height: 50px;" />
+</div>
+<div>
+      <mat-label>Image 3</mat-label>
+    <input type="file" name="file3" #file3 placeholder="Choose file" (change)="uploadFile3(file3.files)" style="display:none;">
+        <button type="button" class="btn btn-success" (click)="file3.click()">Upload File</button>
+    <img src="https://localhost:44368/Uploads/{{RecipeVM.image3}}" *ngIf="RecipeVM.image3" style="width: 50px; height: 50px;" />
+</div>
+</div>
+    <div>
+        <button mat-flat-button color="primary" [disabled]="!f.valid">Save</button>
+    </div>
+      </form>
+</mat-card>
