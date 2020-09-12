@@ -1,11 +1,13 @@
-<h3>Recipe List</h3>
+<div style="text-align: center; width: 98%;margin: auto;">
+
+<h1>Recipe List</h1>
 <button type="button" mat-flat-button color="primary" (click)="sortbyTitle()">Sort By Title</button>
 <button type="button" mat-flat-button color="primary" (click)="sortbyDate()">Sort By Date</button>
 <br/>
 <div style="margin: 20px;">
 
   <mat-form-field>
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type any text to filter data">
   </mat-form-field>
 </div>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;" matSort
@@ -83,3 +85,4 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
