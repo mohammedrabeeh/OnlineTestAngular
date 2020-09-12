@@ -31,6 +31,13 @@ export class ViewRecipeComponent {
   }
   ngAfterViewInit() {
   }
+  
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
 
   isAscTitle:boolean = true;
   sortbyTitle()

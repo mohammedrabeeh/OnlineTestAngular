@@ -1,7 +1,13 @@
 <h3>Recipe List</h3>
 <button type="button" mat-flat-button color="primary" (click)="sortbyTitle()">Sort By Title</button>
 <button type="button" mat-flat-button color="primary" (click)="sortbyDate()">Sort By Date</button>
+<br/>
+<div style="margin: 20px;">
 
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  </mat-form-field>
+</div>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;" matSort
   (matSortChange)="sortData($event)">
 
