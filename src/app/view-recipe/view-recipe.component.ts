@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Recipe } from '../common/model';
-import { Sort } from '@angular/material';
+import { MatPaginator, Sort } from '@angular/material';
+import {MatTableDataSource} from '@angular/material/table';
 
 
 @Component({
@@ -9,12 +11,27 @@ import { Sort } from '@angular/material';
   templateUrl: './view-recipe.component.html',
   styleUrls: ['./view-recipe.component.css']
 })
-export class ViewRecipeComponent implements OnInit {
+export class ViewRecipeComponent {
   displayedColumns: string[] = ['recipeId', 'recipeTitle', 'dateAdded', 'levelName', 'steps', 'ingredients', 'images', 'edit'];
   
   recipes: Recipe[];
+  dataSource: MatTableDataSource<Recipe>;
+
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+
   constructor(private httpService: HttpClient) { 
+    this.httpService.get<Recipe[]>('https://localhost:44368/Recipes/GetRecipe').subscribe(  
+      data => {  
+       this.recipes = data;  
+       this.recipes = this.recipes.slice();
+       this.dataSource = new MatTableDataSource(data);
+       this.dataSource.paginator = this.paginator;
+      }  
+    ); 
   }
+  ngAfterViewInit() {
+  }
+
   isAscTitle:boolean = true;
   sortbyTitle()
   {
@@ -23,6 +40,9 @@ export class ViewRecipeComponent implements OnInit {
        
       return compare(a.recipeTitle.toLowerCase(), b.recipeTitle.toLowerCase(), this.isAscTitle);
     });
+    
+    this.dataSource = new MatTableDataSource(this.recipes);
+    this.dataSource.paginator = this.paginator;
     this.isAscTitle = !this.isAscTitle;
   }
   isAscDate:boolean = true;
@@ -33,6 +53,8 @@ export class ViewRecipeComponent implements OnInit {
        
       return compare(a.dateAdded.toLowerCase(), b.dateAdded.toLowerCase(), this.isAscDate);
     });
+    this.dataSource = new MatTableDataSource(this.recipes);
+    this.dataSource.paginator = this.paginator;
     this.isAscDate = !this.isAscDate;
   }
   sortData(sort: Sort) {
@@ -52,18 +74,13 @@ export class ViewRecipeComponent implements OnInit {
         default: return 0;
       }
     });
+    
+    this.dataSource = new MatTableDataSource(this.recipes);
+    this.dataSource.paginator = this.paginator;
   }
 
   
 
-  ngOnInit() {
-    this.httpService.get<Recipe[]>('https://localhost:44368/Recipes/GetRecipe').subscribe(  
-      data => {  
-       this.recipes = data;  
-       this.recipes = this.recipes.slice();
-      }  
-    ); 
-  }
 
 }
 
