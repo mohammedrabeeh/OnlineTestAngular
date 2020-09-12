@@ -12,7 +12,7 @@ import {MatTableDataSource} from '@angular/material/table';
   styleUrls: ['./view-recipe.component.css']
 })
 export class ViewRecipeComponent {
-  displayedColumns: string[] = ['recipeId', 'recipeTitle', 'dateAdded', 'levelName', 'steps', 'ingredients', 'images', 'edit'];
+  displayedColumns: string[] = ['recipeId', 'recipeTitle', 'dateAdded', 'levelName', 'steps', 'ingredients', 'images', 'edit', 'delete'];
   
   recipes: Recipe[];
   dataSource: MatTableDataSource<Recipe>;
@@ -85,6 +85,16 @@ export class ViewRecipeComponent {
     this.dataSource = new MatTableDataSource(this.recipes);
     this.dataSource.paginator = this.paginator;
   }
+
+
+  deleteItem(rowid) {
+    if(confirm("Are you sure to delete?")) {
+      const index = this.dataSource.data.findIndex(e => e.recipeId == rowid);
+      this.dataSource.data.splice(index, 1);
+      this.dataSource.data = this.dataSource.data;
+    }
+  }
+
 
   
 
