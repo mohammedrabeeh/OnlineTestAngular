@@ -2,8 +2,8 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Recipe } from '../common/model';
-import { MatPaginator, Sort } from '@angular/material';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator, Sort, MatSnackBar } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 @Component({
@@ -13,25 +13,25 @@ import {MatTableDataSource} from '@angular/material/table';
 })
 export class ViewRecipeComponent {
   displayedColumns: string[] = ['recipeId', 'recipeTitle', 'dateAdded', 'levelName', 'steps', 'ingredients', 'images', 'edit', 'delete'];
-  
+
   recipes: Recipe[];
   dataSource: MatTableDataSource<Recipe>;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  constructor(private httpService: HttpClient) { 
-    this.httpService.get<Recipe[]>('https://localhost:44368/Recipes/GetRecipe').subscribe(  
-      data => {  
-       this.recipes = data;  
-       this.recipes = this.recipes.slice();
-       this.dataSource = new MatTableDataSource(data);
-       this.dataSource.paginator = this.paginator;
-      }  
-    ); 
+  constructor(private httpService: HttpClient, private _snackBar: MatSnackBar) {
+    this.httpService.get<Recipe[]>('https://localhost:44368/Recipes/GetRecipe').subscribe(
+      data => {
+        this.recipes = data;
+        this.recipes = this.recipes.slice();
+        this.dataSource = new MatTableDataSource(data);
+        this.dataSource.paginator = this.paginator;
+      }
+    );
   }
   ngAfterViewInit() {
   }
-  
+
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -39,25 +39,23 @@ export class ViewRecipeComponent {
     this.dataSource.filter = filterValue;
   }
 
-  isAscTitle:boolean = true;
-  sortbyTitle()
-  {
+  isAscTitle: boolean = true;
+  sortbyTitle() {
     const data = this.recipes.slice();
     this.recipes = data.sort((a, b) => {
-       
+
       return compare(a.recipeTitle.toLowerCase(), b.recipeTitle.toLowerCase(), this.isAscTitle);
     });
-    
+
     this.dataSource = new MatTableDataSource(this.recipes);
     this.dataSource.paginator = this.paginator;
     this.isAscTitle = !this.isAscTitle;
   }
-  isAscDate:boolean = true;
-  sortbyDate()
-  {
+  isAscDate: boolean = true;
+  sortbyDate() {
     const data = this.recipes.slice();
     this.recipes = data.sort((a, b) => {
-       
+
       return compare(a.dateAdded.toLowerCase(), b.dateAdded.toLowerCase(), this.isAscDate);
     });
     this.dataSource = new MatTableDataSource(this.recipes);
@@ -81,22 +79,43 @@ export class ViewRecipeComponent {
         default: return 0;
       }
     });
-    
+
     this.dataSource = new MatTableDataSource(this.recipes);
     this.dataSource.paginator = this.paginator;
   }
 
 
-  deleteItem(rowid) {
-    if(confirm("Are you sure to delete?")) {
-      const index = this.dataSource.data.findIndex(e => e.recipeId == rowid);
-      this.dataSource.data.splice(index, 1);
-      this.dataSource.data = this.dataSource.data;
+  openSnackBar(message: string) {
+    this._snackBar.open(message, "Close", {
+      duration: 2000,
+    });
+  }
+
+  deleteItem(recipeid) {
+    if (confirm("Are you sure to delete?")) {
+
+      this.httpService.delete('https://localhost:44368/Recipes/DeleteRecipe/' + recipeid).subscribe(
+        data => {
+          console.log(data);
+          if(data["result"] == true)
+          {
+            this.openSnackBar("Data deleted successfully!!!");
+          }
+          else
+          {
+            this.openSnackBar("Data delete failed!!!");
+          }
+        }
+      );
+
+      const recindex = this.recipes.findIndex(e => e.recipeId == recipeid);
+      this.recipes.splice(recindex, 1);
+      this.dataSource.data = this.recipes;
     }
   }
 
 
-  
+
 
 
 }
